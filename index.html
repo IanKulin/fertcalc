@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fert Calc</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Fert Calc</h1>
+    <h3>Nitrogen Fertiliser</h3>
+
+    <label for="n_name">Nitrogen fertiliser:</label>
+    <input
+      type="text"
+      id="n_name"
+      value="Flexi N"
+      oninput="calculate()"
+    /><br />
+    <label for="n_tonnes">Tonnes:</label>
+    <input
+      type="number"
+      id="n_tonnes"
+      min="0"
+      value="1"
+      step="any"
+      oninput="calculate()"
+    /><br />
+    <label for="n_percent">% N:</label>
+    <input
+      type="number"
+      id="n_percent"
+      min="0"
+      value="32"
+      step="any"
+      oninput="calculate()"
+    /><br />
+    <label for="n_cost">On farm cost:</label>
+    <input
+      type="number"
+      id="n_cost"
+      min="0"
+      value="0"
+      step="any"
+      oninput="calculate()"
+    /><br />
+    <br />
+    <h3>Compound Fertiliser</h3>
+    <label for="c_name">Compound fertiliser:</label>
+    <input type="text" id="c_name" value="Blend" oninput="calculate()" /><br />
+    <label for="c_tonnes">Tonnes:</label>
+    <input
+      type="number"
+      id="c_tonnes"
+      min="0"
+      value="0"
+      step="any"
+      oninput="calculate()"
+    /><br />
+    <label for="c_percent">% N:</label>
+    <input
+      type="number"
+      id="c_percent"
+      min="0"
+      value="9.89"
+      step="any"
+      oninput="calculate()"
+    /><br />
+    <label for="c_cost">On farm cost:</label>
+    <input
+      type="number"
+      id="c_cost"
+      min="0"
+      value="0"
+      step="any"
+      oninput="calculate()"
+    /><br /><br />
+
+    <h3>Adjustment Calculation</h3>
+    Unit cost of N: <span id="unitCostOfN">0</span><br />
+    Units of N in compound: <span id="unitsOfNInCompound">0</span><br />
+    Cost of N in compound: <span id="costOfNInCompound">0</span><br />
+    Half cost of N in compound: <span id="halfCostOfNInCompound">0</span><br />
+    Cost of nitrogen fertiliser: <span id="costOfNitrogenFertiliser">0</span>
+    <br />
+    Half cost of nitrogen fertiliser:
+    <span id="halfCostOfNitrogenFertiliser">0</span>
+    <br />
+    Nitrogen adjustment: $<span id="nitrogenAdjustment">0</span>
+    <br /><br />
+
+    <h3>Invoice</h3>
+    <span id="compoundLine">0</span><br />
+    <span id="nitrogenLine">0</span><br />
+    <span id="nitrogenCreditLine">0</span><br />
+    <span id="invoiceTotalLine">0</span><br />
+
+    <script>
+      function calculate() {
+        const spaces = "\u00A0\u00A0\u00A0\u00A0\u00A0";
+        var nCost = parseFloat(document.getElementById("n_cost").value);
+        var nPercent = document.getElementById("n_percent").value;
+        var nUnitCost = (nCost / nPercent) * 100;
+        document.getElementById("unitCostOfN").textContent =
+          "$" +
+          nUnitCost.toFixed(2) +
+          spaces +
+          "($" +
+          document.getElementById("n_cost").value +
+          " ÷ " +
+          document.getElementById("n_percent").value +
+          "%)";
+
+        var cCost = parseFloat(document.getElementById("c_cost").value);
+        var cTonnes = parseFloat(document.getElementById("c_tonnes").value);
+        var cTotal = cCost * cTonnes;
+        document.getElementById("compoundLine").textContent =
+          document.getElementById("c_tonnes").value +
+          "T " +
+          document.getElementById("c_name").value +
+          " @ $" +
+          document.getElementById("c_cost").value +
+          " = " +
+          cTotal.toFixed(2);
+
+        var nCost = parseFloat(document.getElementById("n_cost").value);
+        var nTonnes = parseFloat(document.getElementById("n_tonnes").value);
+        var nTotal = nCost * nTonnes;
+        document.getElementById("nitrogenLine").textContent =
+          document.getElementById("n_tonnes").value +
+          "T " +
+          document.getElementById("n_name").value +
+          " @ $" +
+          document.getElementById("n_cost").value +
+          " = " +
+          nTotal.toFixed(2);
+        document.getElementById("costOfNitrogenFertiliser").textContent =
+          "$" +
+          nTotal.toFixed(2) +
+          spaces +
+          "(" +
+          document.getElementById("n_tonnes").value +
+          "T × $" +
+          document.getElementById("n_cost").value +
+          ")";
+        document.getElementById("halfCostOfNitrogenFertiliser").textContent =
+          "$" +
+          (nTotal / 2).toFixed(2) +
+          spaces +
+          "($" +
+          nTotal.toFixed(2) +
+          " ÷ 2)";
+
+        var cNPercent = document.getElementById("c_percent").value;
+        var nUnitsInCompound = (cTonnes * cNPercent) / 100;
+        document.getElementById("unitsOfNInCompound").textContent =
+          nUnitsInCompound.toFixed(4) +
+          spaces +
+          "(" +
+          document.getElementById("c_tonnes").value +
+          "T × " +
+          document.getElementById("c_percent").value +
+          "%)";
+        var totalNCostOfCompound = nUnitsInCompound * nUnitCost;
+        document.getElementById("costOfNInCompound").textContent =
+          "$" +
+          totalNCostOfCompound.toFixed(2) +
+          spaces +
+          "(" +
+          nUnitsInCompound.toFixed(4) +
+          " × $" +
+          nUnitCost.toFixed(2) +
+          ")";
+        var halfNCostOfCompound = totalNCostOfCompound / 2;
+        document.getElementById("halfCostOfNInCompound").textContent =
+          "$" +
+          halfNCostOfCompound.toFixed(2) +
+          spaces +
+          "($" +
+          totalNCostOfCompound.toFixed(2) +
+          " ÷ 2)";
+
+        var NAdjustment = -(halfNCostOfCompound + nTotal / 2);
+        document.getElementById("nitrogenCreditLine").textContent =
+          "Nitrogen Adjustment = " + NAdjustment.toFixed(2);
+        document.getElementById("nitrogenAdjustment").textContent =
+          -NAdjustment.toFixed(2) +
+          spaces +
+          "($" +
+          halfNCostOfCompound.toFixed(2) +
+          " + $" +
+          (nTotal / 2).toFixed(2) +
+          ")";
+
+        var total = cTotal + nTotal + NAdjustment;
+        document.getElementById("invoiceTotalLine").textContent =
+          "Invoice Total = $" + total.toFixed(2);
+      }
+
+      document.addEventListener("DOMContentLoaded", function (event) {
+        // Call the calculate function when the DOM is fully loaded
+        calculate();
+      });
+    </script>
+  </body>
+</html>
