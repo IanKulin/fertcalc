@@ -112,7 +112,7 @@
           spaces +
           "($" +
           document.getElementById("n_cost").value +
-          " ÷ " +
+          " / " +
           document.getElementById("n_percent").value +
           "%)";
 
@@ -154,7 +154,7 @@
           spaces +
           "($" +
           nTotal.toFixed(2) +
-          " ÷ 2)";
+          " / 2)";
 
         var cNPercent = document.getElementById("c_percent").value;
         var nUnitsInCompound = (cTonnes * cNPercent) / 100;
@@ -163,7 +163,7 @@
           spaces +
           "(" +
           document.getElementById("c_tonnes").value +
-          "T × " +
+          "T x " +
           document.getElementById("c_percent").value +
           "%)";
         var totalNCostOfCompound = nUnitsInCompound * nUnitCost;
@@ -173,7 +173,7 @@
           spaces +
           "(" +
           nUnitsInCompound.toFixed(4) +
-          " × $" +
+          " x $" +
           nUnitCost.toFixed(2) +
           ")";
         var halfNCostOfCompound = totalNCostOfCompound / 2;
